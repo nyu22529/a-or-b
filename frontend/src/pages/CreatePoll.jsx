@@ -32,77 +32,39 @@ function CreatePoll() {
     }
   };
 
-  // [스타일 정의] 이전의 심플한 인라인 스타일로 복귀합니다.
-  const styles = {
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '100vh',
-      padding: '20px',
-      boxSizing: 'border-box',
-    },
-    formBox: {
-      width: '100%',
-      maxWidth: '400px',
-    },
-    input: {
-      width: '100%',
-      padding: '10px',
-      marginBottom: '15px',
-      boxSizing: 'border-box',
-      background: '#333',
-      border: '1px solid #555',
-      color: 'white',
-      borderRadius: '5px',
-    },
-    button: {
-      width: '100%',
-      padding: '12px',
-      cursor: 'pointer',
-      background: '#007bff',
-      color: 'white',
-      border: 'none',
-      borderRadius: '5px',
-      fontSize: '16px',
-    }
-  };
-
   return (
-    <div style={styles.container}>
-      <div style={styles.formBox}>
-        <h1 style={{ textAlign: 'center' }}>A or B</h1>
-        <input
-          style={styles.input}
-          type="text"
-          placeholder="투표 제목"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          style={styles.input}
-          type="text"
-          placeholder="옵션 A"
-          value={optionA}
-          onChange={(e) => setOptionA(e.target.value)}
-        />
-        <input
-          style={styles.input}
-          type="text"
-          placeholder="옵션 B"
-          value={optionB}
-          onChange={(e) => setOptionB(e.target.value)}
-        />
-        <button
-          style={styles.button}
-          onClick={handleCreatePoll}
-          disabled={loading}
-        >
-          {loading ? '만드는 중...' : '투표 만들기'}
-        </button>
-      </div>
-    </div>
+    // 이제 레이아웃 걱정 없이 내용에만 집중합니다.
+    <>
+      <h1>A or B</h1>
+      <input
+        className="poll-input"
+        type="text"
+        placeholder="투표 제목"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <input
+        className="poll-input"
+        type="text"
+        placeholder="옵션 A"
+        value={optionA}
+        onChange={(e) => setOptionA(e.target.value)}
+      />
+      <input
+        className="poll-input"
+        type="text"
+        placeholder="옵션 B"
+        value={optionB}
+        onChange={(e) => setOptionB(e.target.value)}
+      />
+      <button
+        className="poll-button primary"
+        onClick={handleCreatePoll}
+        disabled={loading}
+      >
+        {loading ? '만드는 중...' : '투표 만들기'}
+      </button>
+    </>
   );
 }
 

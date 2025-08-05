@@ -1,11 +1,90 @@
-/* 가장 기본적인 스타일만 남겨둡니다. */
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #282c34; /* 이전의 어두운 배경색 */
+/* --- 레이아웃 --- */
+.poll-box {
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+
+/* --- 공통 요소 --- */
+h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+.poll-button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 2px solid;
+  font-weight: bold;
+  background: transparent;
+  color: inherit; /* 부모 요소의 글자색을 따름 */
+}
+.poll-button.primary {
+  background: #007bff;
+  border-color: #007bff;
   color: white;
+}
+.poll-button.copy {
+  margin-top: 20px;
+  background: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}
+
+/* --- 투표 생성 페이지 --- */
+.poll-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #555;
+  background: #3e4451;
+  color: white;
+  font-size: 1rem;
+}
+@media (prefers-color-scheme: light) {
+  .poll-input {
+    background: #fff;
+    color: #333;
+    border-color: #ccc;
+  }
+}
+
+/* --- 투표 페이지 --- */
+.poll-title {
+  margin-bottom: 20px;
+}
+.result-visualizer {
+  display: flex;
+  width: 100%;
+  height: 200px;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 2px solid;
+}
+.option-pane {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  transition: width 0.5s ease-in-out;
+  box-sizing: border-box;
+  color: white;
+}
+.option-pane.option-a { background-color: #3498db; }
+.option-pane.option-b { background-color: #e74c3c; }
+.option-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.vote-count {
+  font-size: 1.2rem;
+}
+.vote-buttons-container {
+  margin-top: 20px;
 }
