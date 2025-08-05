@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+// useNavigate를 react-router-dom에서 가져옵니다.
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 
-// 기존 App.jsx에 있던 투표 생성 폼 로직 전체를
-// CreatePoll이라는 컴포넌트로 옮겨왔습니다.
 function CreatePoll() {
+  // useNavigate 훅을 호출해서 페이지 이동 함수를 준비합니다.
+  const navigate = useNavigate(); 
+  
   const [title, setTitle] = useState('');
   const [optionA, setOptionA] = useState('');
   const [optionB, setOptionB] = useState('');
@@ -17,20 +20,27 @@ function CreatePoll() {
 
     try {
       setLoading(true);
-      const { error } = await supabase
+      
+      // [핵심 변경점!]
+      // 데이터를 insert한 후, .select().single()을 추가해서
+      // 방금 생성된 데이터(특히 id)를 반환받습니다.
+      const { data, error } = await supabase
         .from('polls')
         .insert([
           { title: title, option_a_text: optionA, option_b_text: optionB }
-        ]);
+        ])
+        .select()
+        .single();
 
       if (error) {
         throw error;
       }
 
-      alert('🎉 투표가 성공적으로 만들어졌습니다!');
-      setTitle('');
-      setOptionA('');
-      setOptionB('');
+      // 성공했다면, 반환받은 데이터의 id를 이용해서 페이지를 이동시킵니다!
+      if (data) {
+        alert('🎉 투표가 성공적으로 만들어졌습니다! 결과 페이지로 이동합니다.');
+        navigate(`/poll/${data.id}`);
+      }
 
     } catch (error) {
       alert('투표 생성 중 오류가 발생했습니다.');
@@ -40,6 +50,7 @@ function CreatePoll() {
     }
   };
 
+  // UI 부분은 이전과 동일합니다.
   return (
     <div style={{ padding: '20px', maxWidth: '400px', margin: 'auto', fontFamily: 'sans-serif' }}>
       <h1 style={{ textAlign: 'center' }}>A or B</h1>
