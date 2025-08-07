@@ -218,3 +218,19 @@ h1 {
 .back-button:hover {
   text-decoration: underline;
 }
+
+/* --- [추가] 콘텐츠 카드 스타일 --- */
+.poll-box, .policy-container {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 다크 모드일 때의 카드 스타일 */
+@media (prefers-color-scheme: dark) {
+  .poll-box, .policy-container {
+    background-color: #3e4451;
+    border: 1px solid #4a505c;
+  }
+}

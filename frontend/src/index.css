@@ -1,4 +1,4 @@
-/* html, body, #root의 높이를 100%로 설정하여 전체 화면을 채웁니다. */
+/* html, body, #root에 기본 스타일을 적용합니다. */
 html, body, #root {
   height: 100%;
   margin: 0;
@@ -6,7 +6,10 @@ html, body, #root {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  
   /* 기본 배경색과 글자색을 설정합니다. */
   background-color: #f0f2f5;
   color: #2c3e50;
@@ -20,11 +23,11 @@ body {
   }
 }
 
-/* React 앱이 렌더링되는 #root 요소를 flex 컨테이너로 만들어 중앙 정렬을 적용합니다. */
+/* [핵심 수정!]
+   #root에서는 flex와 관련된 모든 스타일을 제거합니다.
+   이제 #root는 단순히 전체 화면을 차지하는 '도화지' 역할만 합니다.
+   실제 레이아웃은 App.css의 .app-container가 담당하게 됩니다.
+*/
 #root {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  box-sizing: border-box;
+  /* display: flex; 와 관련된 모든 속성을 삭제했습니다. */
 }
