@@ -10,6 +10,7 @@ function CreatePoll() {
   const [loading, setLoading] = useState(false);
 
   const handleCreatePoll = async () => {
+    // ... (기존과 동일한 로직) ...
     if (!title || !optionA || !optionB) {
       alert('모든 항목을 입력해주세요.');
       return;
@@ -33,7 +34,6 @@ function CreatePoll() {
   };
 
   return (
-    // 이제 레이아웃 걱정 없이 내용에만 집중합니다.
     <>
       <h1>A or B</h1>
       <input
@@ -64,6 +64,12 @@ function CreatePoll() {
       >
         {loading ? '만드는 중...' : '투표 만들기'}
       </button>
+
+      {/* 정책 고지 문구 추가 */}
+      <div className="policy-notice">
+        <p>※ 생성된 투표는 24시간 후 만료됩니다.</p>
+        <p>※ 투표 내용에 대한 책임은 생성자 본인에게 있습니다.</p>
+      </div>
     </>
   );
 }

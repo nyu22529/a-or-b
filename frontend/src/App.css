@@ -1,11 +1,39 @@
+/* ... (기존 레이아웃, 공통 요소, 페이지별 스타일은 동일) ... */
+/* 라이트/다크 모드 기본 설정 */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f0f2f5;
+  color: #2c3e50;
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #282c34;
+    color: #ecf0f1;
+  }
+}
+
 /* --- 레이아웃 --- */
+.app-container {
+  display: flex;
+  flex-direction: column; /* 푸터를 하단에 위치시키기 위해 column으로 변경 */
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
 .poll-box {
   width: 100%;
   max-width: 600px;
   text-align: center;
+  flex-grow: 1; /* main 콘텐츠가 남은 공간을 채우도록 설정 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-/* --- 공통 요소 --- */
+/* ... (기존 h1, .poll-button 등 스타일) ... */
 h1 {
   font-size: 2.5rem;
   font-weight: bold;
@@ -33,7 +61,7 @@ h1 {
   color: white;
 }
 
-/* --- 투표 생성 페이지 --- */
+/* ... (기존 투표 생성/투표 페이지 스타일) ... */
 .poll-input {
   width: 100%;
   padding: 12px;
@@ -52,8 +80,6 @@ h1 {
     border-color: #ccc;
   }
 }
-
-/* --- 투표 페이지 --- */
 .poll-title {
   margin-bottom: 20px;
 }
@@ -87,4 +113,76 @@ h1 {
 }
 .vote-buttons-container {
   margin-top: 20px;
+}
+.error-message {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #e74c3c;
+}
+
+/* --- [신규] 정책 및 신고 관련 스타일 --- */
+.policy-notice {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #95a5a6;
+}
+.policy-notice.small {
+  font-size: 0.8rem;
+}
+.bottom-controls {
+  margin-top: 30px;
+}
+.report-button {
+  background: none;
+  border: none;
+  color: #95a5a6;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 5px;
+}
+.report-button:disabled {
+  color: #7f8c8d;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+/* --- [신규] 푸터 스타일 --- */
+.app-footer {
+  width: 100%;
+  text-align: center;
+  padding: 20px 0;
+  font-size: 0.9rem;
+}
+.app-footer a {
+  color: #7f8c8d;
+  text-decoration: none;
+}
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+/* --- [신규] 개인정보 처리방침 페이지 스타일 --- */
+.policy-container {
+  text-align: left;
+  background-color: #ffffff;
+  color: #333;
+  padding: 40px;
+  border-radius: 8px;
+  max-width: 800px;
+}
+@media (prefers-color-scheme: dark) {
+  .policy-container {
+    background-color: #3e4451;
+    color: #ecf0f1;
+  }
+}
+.policy-container h1, .policy-container h2 {
+  border-bottom: 1px solid #ecf0f1;
+  padding-bottom: 10px;
+}
+.home-link {
+  text-decoration: none;
+  font-weight: bold;
+  color: #3498db;
 }
