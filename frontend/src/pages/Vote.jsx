@@ -7,21 +7,46 @@ function Vote() {
   const [poll, setPoll] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isReported, setIsReported] = useState(false); // 신고 상태 관리 state
+  const [isVoted, setIsVoted] = useState(false); // [신규] 사용자의 투표 여부를 기억하는 state
 
   useEffect(() => {
-    // ... (데이터 로딩 로직은 기존과 동일) ...
+    // 페이지가 로드될 때, localStorage를 확인해서 이미 투표했는지 체크합니다.
+    const checkVotedStatus = () => {
+      const voted = localStorage.getItem('voted_poll_' + id);
+      if (voted) {
+        setIsVoted(true);
+      }
+    };
+    
+    checkVotedStatus();
+
     const fetchPoll = async () => {
+      // ... (데이터 로딩 로직은 기존과 동일) ...
       try {
-        const { data, error } = await supabase.from('polls').select('*').eq('id', id).single();
-        if (error) throw error;
+        const { data, error } = await supabase
+          .from('polls')
+          .select('*')
+          .eq('id', id)
+          .eq('is_deleted', false)
+          .single();
+
+        if (error) {
+          if (!data) {
+            setError('만료되었거나 찾을 수 없는 투표입니다.');
+          } else {
+            throw error;
+          }
+        }
+        
         if (data) {
           setPoll(data);
         } else {
           setError('만료되었거나 찾을 수 없는 투표입니다.');
         }
+
       } catch (error) {
         setError('투표 정보를 불러오는 데 실패했습니다.');
+        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -29,8 +54,14 @@ function Vote() {
     fetchPoll();
   }, [id]);
 
+  // [수정] handleVote 함수에 localStorage 로직 추가
   const handleVote = async (option) => {
-    // ... (투표하기 로직은 기존과 동일) ...
+    // 1. localStorage를 확인하여 이미 투표했는지 검사합니다.
+    if (localStorage.getItem('voted_poll_' + id)) {
+      alert('이미 투표에 참여하셨습니다.');
+      return;
+    }
+
     if (!poll) return;
     const columnToUpdate = option === 'A' ? 'option_a_votes' : 'option_b_votes';
     try {
@@ -41,7 +72,12 @@ function Vote() {
         .select()
         .single();
       if (error) throw error;
+      
+      // 2. Supabase 업데이트 성공 시, localStorage에 기록을 남깁니다.
+      localStorage.setItem('voted_poll_' + id, 'true');
+      setIsVoted(true); // 화면의 버튼을 비활성화하기 위해 state 업데이트
       setPoll(data);
+
     } catch (error) {
       alert('투표 처리 중 오류가 발생했습니다.');
     }
@@ -52,26 +88,6 @@ function Vote() {
     navigator.clipboard.writeText(window.location.href)
       .then(() => alert('✅ 링크가 복사되었습니다!'))
       .catch(() => alert('링크 복사에 실패했습니다.'));
-  };
-
-  // [다시 추가] 신고 기능 함수
-  const handleReport = async () => {
-    if (isReported) {
-      alert('이미 신고 처리되었습니다.');
-      return;
-    }
-    // window.confirm 대신 alert를 사용하여 사용자의 추가 행동을 막습니다.
-    const confirmReport = window.confirm('정말로 이 투표를 신고하시겠습니까? 부적절한 투표는 관리자 확인 후 삭제될 수 있습니다.');
-    if (confirmReport) {
-      try {
-        const { error } = await supabase.from('reports').insert([{ poll_id: id }]);
-        if (error) throw error;
-        alert('신고가 접수되었습니다.');
-        setIsReported(true); // 신고 버튼 비활성화를 위해 상태 변경
-      } catch (error) {
-        alert('신고 처리 중 오류가 발생했습니다.');
-      }
-    }
   };
 
   if (loading) return <>로딩 중...</>;
@@ -98,21 +114,21 @@ function Vote() {
       </div>
 
       <div className="vote-buttons-container">
-        <button className="poll-button" onClick={() => handleVote('A')}>{poll.option_a_text} 투표</button>
-        <button className="poll-button" onClick={() => handleVote('B')}>{poll.option_b_text} 투표</button>
+        {/* isVoted 상태에 따라 버튼을 비활성화합니다. */}
+        <button className="poll-button" onClick={() => handleVote('A')} disabled={isVoted}>
+          {poll.option_a_text} 투표
+        </button>
+        <button className="poll-button" onClick={() => handleVote('B')} disabled={isVoted}>
+          {poll.option_b_text} 투표
+        </button>
       </div>
+      
+      {/* isVoted가 true일 때, 투표 완료 메시지를 보여줍니다. */}
+      {isVoted && <p className="voted-message">투표에 참여해주셔서 감사합니다!</p>}
 
       <div className="bottom-buttons-container">
         <button className="poll-button copy" onClick={handleCopyLink}>🔗 링크 복사</button>
         <Link to="/" className="poll-button home">🏠 새 투표 만들기</Link>
-      </div>
-      
-      {/* [다시 추가] 신고 버튼과 정책 고지 문구 */}
-      <div className="bottom-controls">
-        <p className="policy-notice small">※ 이 투표는 24시간 후 만료됩니다.</p>
-        <button className="report-button" onClick={handleReport} disabled={isReported}>
-          {isReported ? '신고됨' : '🚨 이 투표 신고하기'}
-        </button>
       </div>
     </>
   );
