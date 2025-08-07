@@ -1,4 +1,4 @@
-/* ... (기존 레이아웃, 공통 요소, 페이지별 스타일은 동일) ... */
+/* ... (기존 body, 레이아웃, 공통 요소, 페이지별 스타일은 동일) ... */
 /* 라이트/다크 모드 기본 설정 */
 body {
   margin: 0;
@@ -16,7 +16,7 @@ body {
 /* --- 레이아웃 --- */
 .app-container {
   display: flex;
-  flex-direction: column; /* 푸터를 하단에 위치시키기 위해 column으로 변경 */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
@@ -27,13 +27,13 @@ body {
   width: 100%;
   max-width: 600px;
   text-align: center;
-  flex-grow: 1; /* main 콘텐츠가 남은 공간을 채우도록 설정 */
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-/* ... (기존 h1, .poll-button 등 스타일) ... */
+/* --- 공통 요소 --- */
 h1 {
   font-size: 2.5rem;
   font-weight: bold;
@@ -47,7 +47,9 @@ h1 {
   border: 2px solid;
   font-weight: bold;
   background: transparent;
-  color: inherit; /* 부모 요소의 글자색을 따름 */
+  color: inherit;
+  text-decoration: none; /* Link 태그의 밑줄 제거 */
+  display: inline-block; /* Link 태그가 버튼처럼 보이도록 */
 }
 .poll-button.primary {
   background: #007bff;
@@ -55,11 +57,17 @@ h1 {
   color: white;
 }
 .poll-button.copy {
-  margin-top: 20px;
   background: #6c757d;
   border-color: #6c757d;
   color: white;
 }
+/* [신규] 홈 버튼 스타일 */
+.poll-button.home {
+  background: #28a745;
+  border-color: #28a745;
+  color: white;
+}
+
 
 /* ... (기존 투표 생성/투표 페이지 스타일) ... */
 .poll-input {
@@ -114,13 +122,17 @@ h1 {
 .vote-buttons-container {
   margin-top: 20px;
 }
+/* [신규] 하단 버튼들을 담는 컨테이너 */
+.bottom-buttons-container {
+  margin-top: 20px;
+}
 .error-message {
   font-size: 1.5rem;
   font-weight: 500;
   color: #e74c3c;
 }
 
-/* --- [신규] 정책 및 신고 관련 스타일 --- */
+/* ... (기존 정책 및 신고 관련 스타일) ... */
 .policy-notice {
   margin-top: 20px;
   font-size: 0.9rem;
@@ -147,22 +159,23 @@ h1 {
   text-decoration: none;
 }
 
-/* --- [신규] 푸터 스타일 --- */
+/* --- 푸터 스타일 --- */
 .app-footer {
   width: 100%;
   text-align: center;
   padding: 20px 0;
   font-size: 0.9rem;
+  margin-top: auto;
 }
 .app-footer a {
-  color: #7f8c8d;
+  color: #95a5a6;
   text-decoration: none;
 }
 .app-footer a:hover {
   text-decoration: underline;
 }
 
-/* --- [신규] 개인정보 처리방침 페이지 스타일 --- */
+/* --- 개인정보 처리방침 페이지 스타일 --- */
 .policy-container {
   text-align: left;
   background-color: #ffffff;
@@ -170,6 +183,7 @@ h1 {
   padding: 40px;
   border-radius: 8px;
   max-width: 800px;
+  line-height: 1.6;
 }
 @media (prefers-color-scheme: dark) {
   .policy-container {
@@ -181,8 +195,16 @@ h1 {
   border-bottom: 1px solid #ecf0f1;
   padding-bottom: 10px;
 }
-.home-link {
-  text-decoration: none;
+.back-button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 1rem;
   font-weight: bold;
   color: #3498db;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+.back-button:hover {
+  text-decoration: underline;
 }

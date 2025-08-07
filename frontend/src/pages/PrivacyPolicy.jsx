@@ -1,11 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+// Link 대신 useNavigate를 불러옵니다.
+import { useNavigate } from 'react-router-dom';
 
 function PrivacyPolicy() {
-  // 스타일은 App.css에서 관리되도록 className을 사용합니다.
+  // 페이지 이동 함수를 준비합니다.
+  const navigate = useNavigate();
+
+  // 이전 페이지로 돌아가는 함수
+  const handleGoBack = () => {
+    navigate(-1); // -1은 '이전 페이지'로 이동하라는 특별한 명령어입니다.
+  };
+
   return (
     <div className="policy-container">
-      <Link to="/" className="home-link">← 홈으로 돌아가기</Link>
+      {/* Link를 button으로 변경하고, onClick 이벤트를 연결합니다. */}
+      <button onClick={handleGoBack} className="back-button">
+        ← 뒤로가기
+      </button>
       
       <h1>A or B 개인정보 처리방침</h1>
       <p><strong>시행일자: 2025년 8월 7일</strong></p>

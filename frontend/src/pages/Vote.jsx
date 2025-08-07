@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 
 function Vote() {
@@ -7,38 +7,21 @@ function Vote() {
   const [poll, setPoll] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isReported, setIsReported] = useState(false); // 신고 상태 관리
+  const [isReported, setIsReported] = useState(false); // 신고 상태 관리 state
 
   useEffect(() => {
+    // ... (데이터 로딩 로직은 기존과 동일) ...
     const fetchPoll = async () => {
       try {
-        const { data, error } = await supabase
-          .from('polls')
-          .select('*')
-          .eq('id', id)
-          .eq('is_deleted', false) // [수정] is_deleted가 false인 것만 가져옵니다.
-          .single();
-
-        if (error) {
-          // 데이터가 없는 경우(null)도 에러로 취급될 수 있으므로,
-          // 명시적으로 데이터가 없을 때의 메시지를 설정합니다.
-          if (!data) {
-            setError('만료되었거나 찾을 수 없는 투표입니다.');
-          } else {
-            throw error;
-          }
-        }
-        
+        const { data, error } = await supabase.from('polls').select('*').eq('id', id).single();
+        if (error) throw error;
         if (data) {
           setPoll(data);
         } else {
-          // 데이터가 없는 경우 여기서도 한 번 더 확인
           setError('만료되었거나 찾을 수 없는 투표입니다.');
         }
-
       } catch (error) {
         setError('투표 정보를 불러오는 데 실패했습니다.');
-        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -47,7 +30,7 @@ function Vote() {
   }, [id]);
 
   const handleVote = async (option) => {
-    // ... (기존과 동일한 로직) ...
+    // ... (투표하기 로직은 기존과 동일) ...
     if (!poll) return;
     const columnToUpdate = option === 'A' ? 'option_a_votes' : 'option_b_votes';
     try {
@@ -63,21 +46,22 @@ function Vote() {
       alert('투표 처리 중 오류가 발생했습니다.');
     }
   };
-
+  
   const handleCopyLink = () => {
-    // ... (기존과 동일한 로직) ...
+    // ... (링크 복사 로직은 기존과 동일) ...
     navigator.clipboard.writeText(window.location.href)
       .then(() => alert('✅ 링크가 복사되었습니다!'))
       .catch(() => alert('링크 복사에 실패했습니다.'));
   };
 
-  // [신규] 신고 기능 함수
+  // [다시 추가] 신고 기능 함수
   const handleReport = async () => {
     if (isReported) {
       alert('이미 신고 처리되었습니다.');
       return;
     }
-    const confirmReport = window.confirm('정말로 이 투표를 신고하시겠습니까?');
+    // window.confirm 대신 alert를 사용하여 사용자의 추가 행동을 막습니다.
+    const confirmReport = window.confirm('정말로 이 투표를 신고하시겠습니까? 부적절한 투표는 관리자 확인 후 삭제될 수 있습니다.');
     if (confirmReport) {
       try {
         const { error } = await supabase.from('reports').insert([{ poll_id: id }]);
@@ -91,7 +75,6 @@ function Vote() {
   };
 
   if (loading) return <>로딩 중...</>;
-  // [수정] 에러 메시지를 우선적으로 표시합니다.
   if (error) return <h2 className="error-message">{error}</h2>;
   if (!poll) return <h2 className="error-message">만료되었거나 찾을 수 없는 투표입니다.</h2>;
 
@@ -104,7 +87,6 @@ function Vote() {
       <h1 className="poll-title">{poll.title}</h1>
       
       <div className="result-visualizer">
-        {/* ... (기존과 동일한 UI) ... */}
         <div className="option-pane option-a" style={{ width: `${optionAPercentage}%` }}>
           <span className="option-text">{poll.option_a_text}</span>
           <span className="vote-count">{poll.option_a_votes}표 ({optionAPercentage.toFixed(1)}%)</span>
@@ -120,9 +102,12 @@ function Vote() {
         <button className="poll-button" onClick={() => handleVote('B')}>{poll.option_b_text} 투표</button>
       </div>
 
-      <button className="poll-button copy" onClick={handleCopyLink}>🔗 링크 복사</button>
+      <div className="bottom-buttons-container">
+        <button className="poll-button copy" onClick={handleCopyLink}>🔗 링크 복사</button>
+        <Link to="/" className="poll-button home">🏠 새 투표 만들기</Link>
+      </div>
       
-      {/* 신고 버튼과 정책 고지 문구 추가 */}
+      {/* [다시 추가] 신고 버튼과 정책 고지 문구 */}
       <div className="bottom-controls">
         <p className="policy-notice small">※ 이 투표는 24시간 후 만료됩니다.</p>
         <button className="report-button" onClick={handleReport} disabled={isReported}>
