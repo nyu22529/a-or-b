@@ -1,4 +1,3 @@
-/* ... (기존 body, 레이아웃, 공통 요소, 페이지별 스타일은 동일) ... */
 /* 라이트/다크 모드 기본 설정 */
 body {
   margin: 0;
@@ -48,8 +47,6 @@ h1 {
   font-weight: bold;
   background: transparent;
   color: inherit;
-  text-decoration: none; /* Link 태그의 밑줄 제거 */
-  display: inline-block; /* Link 태그가 버튼처럼 보이도록 */
 }
 .poll-button.primary {
   background: #007bff;
@@ -57,19 +54,13 @@ h1 {
   color: white;
 }
 .poll-button.copy {
+  margin-top: 20px;
   background: #6c757d;
   border-color: #6c757d;
   color: white;
 }
-/* [신규] 홈 버튼 스타일 */
-.poll-button.home {
-  background: #28a745;
-  border-color: #28a745;
-  color: white;
-}
 
-
-/* ... (기존 투표 생성/투표 페이지 스타일) ... */
+/* --- 투표 생성 페이지 --- */
 .poll-input {
   width: 100%;
   padding: 12px;
@@ -88,6 +79,8 @@ h1 {
     border-color: #ccc;
   }
 }
+
+/* --- 투표 페이지 --- */
 .poll-title {
   margin-bottom: 20px;
 }
@@ -122,17 +115,13 @@ h1 {
 .vote-buttons-container {
   margin-top: 20px;
 }
-/* [신규] 하단 버튼들을 담는 컨테이너 */
-.bottom-buttons-container {
-  margin-top: 20px;
-}
 .error-message {
   font-size: 1.5rem;
   font-weight: 500;
   color: #e74c3c;
 }
 
-/* ... (기존 정책 및 신고 관련 스타일) ... */
+/* --- 정책 및 신고 관련 스타일 --- */
 .policy-notice {
   margin-top: 20px;
   font-size: 0.9rem;
@@ -195,16 +184,5 @@ h1 {
   border-bottom: 1px solid #ecf0f1;
   padding-bottom: 10px;
 }
-.back-button {
-  background: none;
-  border: none;
-  padding: 0;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #3498db;
-  cursor: pointer;
-  margin-bottom: 20px;
-}
-.back-button:hover {
-  text-decoration: underline;
-}
+
+/* .back-button 스타일은 더 이상 필요 없으므로 삭제했습니다. */
